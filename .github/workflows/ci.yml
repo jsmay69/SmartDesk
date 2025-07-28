@@ -1,0 +1,45 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    - name: Run tests with results and coverage
+      run: dotnet test --no-build --configuration Release --verbosity normal \
+        --logger "trx;LogFileName=test_results.trx" \
+        --collect:"XPlat Code Coverage"
+    - name: Publish test results
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Test Results
+        path: '**/test_results.trx'
+        reporter: vstest
+    - name: Publish code coverage
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Code Coverage
+        path: '**/coverage.cobertura.xml'
+        reporter: cobertura
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: "**/coverage.cobertura.xml"
