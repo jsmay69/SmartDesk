@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using SmartDesk.Infrastructure.Persistence;
 using SmartDesk.Infrastructure.Persistence.Repositories;
 using SmartDesk.Domain.Entities;
+using SmartDesk.Infrastructure.Common;  
+using SmartDesk.Domain.Common;          
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,11 +17,21 @@ public class TodoItemRepositoryAdditionalTests
     private readonly SmartDeskDbContext _context;
     private readonly TodoItemRepository _repo;
 
+
+    /// <summary>
+    /// A stub that does nothing when domain events are dispatched.
+    /// </summary>
+    private class NoOpDispatcher : IDomainEventDispatcher
+    {
+        public Task DispatchAsync(IDomainEvent @event)
+            => Task.CompletedTask;
+    }
+
     public TodoItemRepositoryAdditionalTests()
     {
         var opts = new DbContextOptionsBuilder<SmartDeskDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-        _context = new SmartDeskDbContext(opts);
+    .UseInMemoryDatabase("TestDb").Options;
+        _context = new SmartDeskDbContext(opts, new NoOpDispatcher());
         _repo = new TodoItemRepository(_context);
     }
 

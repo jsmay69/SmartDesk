@@ -1,18 +1,23 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SmartDesk.Application.Interfaces;
+using SmartDesk.Application.Interfaces;
+using SmartDesk.Domain.Common;
 using SmartDesk.Domain.Entities;
+using SmartDesk.Domain.Events;
 using SmartDesk.Infrastructure.AI;
+using SmartDesk.Infrastructure.AI;
+using SmartDesk.Infrastructure.Common;
+using SmartDesk.Infrastructure.Events;
 using SmartDesk.Infrastructure.Persistence;
 using SmartDesk.Infrastructure.Persistence.Repositories;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using SmartDesk.Application.Interfaces;
-using SmartDesk.Infrastructure.AI;
+using SmartDesk.Infrastructure.Services;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +31,10 @@ builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
 builder.Services.AddScoped<INaturalLanguageTaskParser, TaskParserService>();
 builder.Services.AddScoped<IEmailSummarizerService, EmailSummarizerService>();
 builder.Services.AddScoped<ICalendarPlannerService, CalendarPlannerService>();
+builder.Services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+builder.Services.AddScoped<IReminderService, ReminderServiceStub>();
+
+builder.Services.AddScoped<IEventHandler<TodoItemCompletedEvent>, NotifyOnCompletionHandler>();
 
 // Controllers
 builder.Services.AddControllers();
