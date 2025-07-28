@@ -1,9 +1,12 @@
 using SmartDesk.Application.DTOs;
-using System.Threading.Tasks;
 
-namespace SmartDesk.Application.Interfaces;
-
-public interface INaturalLanguageTaskParser
+namespace SmartDesk.Application.Interfaces
 {
-    Task<TodoItemDto> ParseAsync(string rawText);
+    /// <summary>
+    /// Parses free?form text into a strongly typed TodoItemDto.
+    /// </summary>
+    public interface INaturalLanguageTaskParser
+    {
+        Task<TodoItemDto> ParseAsync(string rawText);
+    }
 }
