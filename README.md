@@ -62,6 +62,8 @@ Content-Type: application/json
 "Remind me to call John tomorrow at 3pm"
 ```
 
+---
+
 ### 2. CRUD API Examples
 
 #### 2.1 Create a New TodoItem
@@ -156,6 +158,44 @@ DELETE /api/v1.0/todoitems/{id}
 ```
 
 **Response:** `204 No Content`
+
+---
+
+### 3. Calendar Planner API Examples
+
+```http
+POST /api/v1.0/calendar/freebusy
+Content-Type: application/json
+
+{
+  "calendarId": "primary",
+  "from": "2025-08-01T09:00:00Z",
+  "to":   "2025-08-01T17:00:00Z"
+}
+```
+
+**Response:** `200 OK`
+```json
+{
+  "calendarId": "primary",
+  "busySlots": [
+    {
+      "start": "2025-08-01T13:00:00Z",
+      "end":   "2025-08-01T14:00:00Z"
+    }
+  ],
+  "freeSlots": [
+    {
+      "start": "2025-08-01T09:00:00Z",
+      "end":   "2025-08-01T13:00:00Z"
+    },
+    {
+      "start": "2025-08-01T14:00:00Z",
+      "end":   "2025-08-01T17:00:00Z"
+    }
+  ]
+}
+```
 
 ---
 

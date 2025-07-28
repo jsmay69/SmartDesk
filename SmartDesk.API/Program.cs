@@ -25,6 +25,7 @@ builder.Services.AddDbContext<SmartDeskDbContext>(opts =>
 builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
 builder.Services.AddScoped<INaturalLanguageTaskParser, TaskParserService>();
 builder.Services.AddScoped<IEmailSummarizerService, EmailSummarizerService>();
+builder.Services.AddScoped<ICalendarPlannerService, CalendarPlannerService>();
 
 // Controllers
 builder.Services.AddControllers();
