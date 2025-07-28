@@ -1,0 +1,110 @@
+{
+  "info": {
+    "name": "SmartDesk Agent API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "f3b9a1c2-4d5e-4f73-8b2e-1c2d3e4f5a6b"
+  },
+  "item": [
+    {
+      "name": "Get All TodoItems",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1.0/todoitems"
+        }
+      }
+    },
+    {
+      "name": "Get TodoItem by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1.0/todoitems/:id"
+        }
+      },
+      "description": "Replace :id with an actual TodoItem ID"
+    },
+    {
+      "name": "Create TodoItem",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"New Task\",\n  \"description\": \"Description\",\n  \"dueDate\": \"2025-08-20T12:00:00Z\",\n  \"priority\": \"Normal\",\n  \"isCompleted\": false\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1.0/todoitems"
+        }
+      }
+    },
+    {
+      "name": "Update TodoItem",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": \"{{todoId}}\",\n  \"title\": \"Updated Task\",\n  \"description\": \"Updated description\",\n  \"dueDate\": \"2025-08-25T12:00:00Z\",\n  \"priority\": \"Normal\",\n  \"isCompleted\": false\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1.0/todoitems/{{todoId}}"
+        }
+      },
+      "description": "Set the variable todoId or replace in URL"
+    },
+    {
+      "name": "Delete TodoItem",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1.0/todoitems/{{todoId}}"
+        }
+      },
+      "description": "Set the variable todoId or replace in URL"
+    },
+    {
+      "name": "Parse TodoItem",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "\"Remind me to call the team tomorrow morning\""
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1.0/todoitems/parse"
+        }
+      },
+      "description": "Natural language to TodoItem conversion"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:5001"
+    },
+    {
+      "key": "todoId",
+      "value": ""
+    }
+  ]
+}
