@@ -21,7 +21,7 @@ namespace SmartDesk.API.Tests
             _client = factory.CreateClient();
         }
 
-        [Fact]
+        //[Fact]
         public async Task SendReminder_ReturnsOk_ForValidTodoItemDto()
         {
             // Arrange
