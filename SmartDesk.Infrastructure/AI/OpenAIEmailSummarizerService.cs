@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
+using Prometheus;
 using SmartDesk.Application.Configuration;
 using SmartDesk.Application.DTOs;
 using SmartDesk.Application.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,6 +13,9 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
+
+
 
 namespace SmartDesk.Infrastructure.AI
 {
@@ -24,6 +29,9 @@ namespace SmartDesk.Infrastructure.AI
         private readonly string _apiKey;
         private readonly string _model;
 
+        private static readonly Counter _emailSummaries = Metrics
+    .CreateCounter("smartdesk_email_summaries_total",
+                   "Total number of email summarizations performed");
         public OpenAIEmailSummarizerService(
             HttpClient http,
             IOptions<EmailSummarizerSettings> opts)
@@ -125,6 +133,7 @@ Now summarize this email:
             if (string.IsNullOrWhiteSpace(summary.SummaryText))
                 summary.SummaryText = ExtractSummaryText(rawEmailText);
 
+            _emailSummaries.Inc();
             return summary;
         }
 

@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using SmartDesk.Application.Configurations;
 using SmartDesk.Application.Interfaces;
+using Prometheus;
+
+
 
 namespace SmartDesk.Infrastructure.Services
 {
@@ -19,6 +22,10 @@ namespace SmartDesk.Infrastructure.Services
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<ReminderSchedulerService> _logger;
         private readonly ReminderSettings _settings;
+
+        private static readonly Counter _remindersSent = Metrics
+                    .CreateCounter("smartdesk_reminders_sent_total",
+                   "Total number of task reminders sent");
 
         public ReminderSchedulerService(
             IServiceScopeFactory scopeFactory,
@@ -61,6 +68,7 @@ namespace SmartDesk.Infrastructure.Services
                         try
                         {
                             _logger.LogInformation("Sending reminder for Task {Id} due at {Due}", task.Id, task.DueDate);
+                            _remindersSent.Inc();
                             await reminder.SendReminderAsync(task);
 
                             task.IsReminderSent = true;
