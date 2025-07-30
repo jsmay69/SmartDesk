@@ -1,7 +1,5 @@
 using SmartDesk.Domain.Common;
 using SmartDesk.Domain.Events;
-using System;
-
 namespace SmartDesk.Domain.Entities
 {
     public class TodoItem : BaseEntity
@@ -14,12 +12,13 @@ namespace SmartDesk.Domain.Entities
         public bool IsCompleted { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+        public bool IsReminderSent { get; set; } = false;
+
         public void MarkCompleted()
         {
             if (!IsCompleted)
             {
                 IsCompleted = true;
-                // Raise a domain event when completed
                 RaiseEvent(new TodoItemCompletedEvent(this));
             }
         }

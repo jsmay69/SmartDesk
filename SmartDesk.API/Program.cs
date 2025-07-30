@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SmartDesk.API;
 using SmartDesk.Application.Configuration;
+using SmartDesk.Application.Configurations;
 using SmartDesk.Application.Interfaces;
 using SmartDesk.Domain.Common;
 using SmartDesk.Domain.Entities;
@@ -36,11 +37,19 @@ builder.Services.AddScoped<INaturalLanguageTaskParser, TaskParserService>();
 // ??????????? Domain Events & Reminders ???????????
 builder.Services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 builder.Services.AddScoped<IEventHandler<TodoItemCompletedEvent>, NotifyOnCompletionHandler>();
-builder.Services.AddScoped<IReminderService, ReminderServiceStub>();
+builder.Services.AddScoped<IReminderService, SmtpReminderService>();
+
+builder.Services.AddHostedService<ReminderSchedulerService>();
 
 // ??????????? Email Summarizer Configuration ???????????
 builder.Services.Configure<EmailSummarizerSettings>(
     config.GetSection("EmailSummarizer"));
+// Bind SMTP settings
+builder.Services.Configure<SmtpSettings>(
+    builder.Configuration.GetSection("Smtp"));
+
+builder.Services.Configure<ReminderSettings>(
+    builder.Configuration.GetSection("Reminder"));
 
 // Register both implementations
 builder.Services.AddScoped<OpenAIEmailSummarizerService>();
