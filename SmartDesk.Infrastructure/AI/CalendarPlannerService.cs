@@ -5,7 +5,9 @@ namespace SmartDesk.Infrastructure.AI
 {
     public class CalendarPlannerService : ICalendarPlannerService
     {
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task<FreeBusyDto> GetFreeBusyAsync(CalendarFreeBusyRequest req)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             // Stub: one busy slot in the middle of the window,
             // free slots before and after.

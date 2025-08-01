@@ -10,7 +10,7 @@ namespace SmartDesk.Application.DTOs
         /// <summary>
         /// The ID of the calendar (e.g., "primary" or a full email address).
         /// </summary>
-        public string CalendarId { get; set; }
+        public string CalendarId { get; set; } = string.Empty;
 
         /// <summary>
         /// The start of the time window to query (UTC).

@@ -14,16 +14,16 @@ namespace SmartDesk.Application.DTOs
         /// <summary>
         /// The calendar ID that was queried.
         /// </summary>
-        public string CalendarId { get; set; }
+        public string CalendarId { get; set; } = string.Empty;
 
         /// <summary>
         /// List of time slots when the calendar is busy.
         /// </summary>
-        public List<TimeSlotDto> BusySlots { get; set; }
+        public List<TimeSlotDto> BusySlots { get; set; } = new List<TimeSlotDto>(); 
 
         /// <summary>
         /// List of time slots when the calendar is free.
         /// </summary>
-        public List<TimeSlotDto> FreeSlots { get; set; }
+        public List<TimeSlotDto> FreeSlots { get; set; } = new List<TimeSlotDto>();
     }
 }
