@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "smartdesk-467518",
+  "private_key_id": "aaa53c9206646aebf8e562126be5ba83fbe720ab",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC/vWiilrbEoJz8\nAiQl7v5Q//uWTwB34NAE5/ztQFOWv+srIlVQ340gyY8nKVk112d3Jak6WHytTWQC\n6N6SapjU1VXxrHa49kEZvUQegFg7lFnBYpaZsZic8eeTlzkk++A0IIo85YRXEVGU\nGEukENCLQdZ0+8o81NqH2PXqUIpEGW2uVZxqnLr2OGqNFYmHqyhs6JJTJDmwMbHs\ncGo01uQyDsP0napGz/E6gwcepSCcNvlPL5/PJ5soYiPwcPXJzj41r/cr1BpsXCtP\nnTURNKwVk1RoAbqT8scwoZLKZj93UAYo1XjlMS2m4Au3QmImBAxsEtykHVYhqhoc\nOGkpjM+nAgMBAAECggEACDm8cOktSw8m3OrMmTIBCAGLTf3yo7HpyqQXJihxzZBL\nKu0Mou0MNWFgOkpcUOJ+Rk6/zUh5hMfCqBtMXRSknNDQII+JAlNSJKQJdZOE9X1e\nQl0T3+EODoGUMTE2Gt+RVTsmIwmnnUKZcNR//jhYcfjvldItcWGiRFyq5BPzcotf\npTpxP3nB3JwAzD4k5Xbdr7I7KS9unB7WfI8UwNI8tOqwj2pRd8+wNADwN27Q5sxA\nVxg7q4nC5ikjBKn940lzJg9m+p/EV+XN9krk03AEQqoi6smzpu2Jo9sFJqxtfumV\nQdE4l9Ymgd1kMqALjV4s22mapqn+0EVolF2dU58VYQKBgQDw65qqBqRDgaXSLzc6\nvTgyEXQXVGYkLZmKGm+tl9qOaae3zcwZ6HHt2+69NE5/GzJ6iFGwoEM+T6+/OzQC\nuJL/iLKlFhK9BjZHgeWxKs/5t800jjSSEhXrfe7ASi4axwiKCxGvB2MtSdWG4jvz\n6g4vQb/a6XUIcIafNSzaJv8yhwKBgQDLvcKBrCGAZA779UB/W8s53lp/U+pmlud/\n+HegKuUovgggCZnlCaBvqVJ7UwCwvsjANqzglvlD8zxqdmjVRF+U26Z/G+y1tPzh\n7ZldiSrzOehmJt5ILrZtTddJ/gyx4h/cUxRJ+ZmFzXUMC/RXEZlsS5ANllvdfQj/\nLgzQ3dIh4QKBgGE30cu2rmaHVLDCWNkdLiYWIPChIC6NMB4omNRGKO26+PEU3L2/\nrOm9DFPRXbOw9+e2RrCtmzTz1wmmDFDkxnzTXrN7eshIT3L/mf6qNg6g+u+wSsp+\n/dVvlf6GcKBhnLKH0PT+WCkYWE/7zxGYa2zqbU8bUhy7u7dXL+hAQE7VAoGAfmtT\nepStAPaVGZ/XEm+JzXF748/U/S0bnhs1Vwvmv34SmpZ6iFSN2VtOE7mwDvuCo0oJ\nwR3Ms24FCeZJLDPNvxb/25UfLqyL0UBVzmUjYmKHIoNxn4ZkqbQIJyBdDi9KJ7Lh\nPvmCWjTfMMdmKHSCJ2FHlDa879T6tSQEzcEl9uECgYBXKrtSxpy7YWFsCuuwLbwF\nSxca++JFykhbnNTxc6gcIsv5/XZ3BhZ6uMuCkvzePqDEqSG+lsmuxSXTbdDQl7Qk\n+D07B7C+mIgmWSaoOE1x5FWhShnPlP9IeDy8VQACDUrNeoFnOBigHj2J1TmnGR+7\nMadBrD9R9f7+sOG7MdpeLw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "smartdesk@smartdesk-467518.iam.gserviceaccount.com",
+  "client_id": "100523559839016583146",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/smartdesk%40smartdesk-467518.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

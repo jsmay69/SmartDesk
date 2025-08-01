@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -26,21 +27,21 @@ using SmartDesk.Infrastructure.Persistence.Repositories;
 using SmartDesk.Infrastructure.Services;
 using System;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
-// ??? Database & Repositories ?????????????????????????????????????????????????
+// Database & Repositories 
 builder.Services.AddDbContext<SmartDeskDbContext>(opts =>
     opts.UseSqlite(config.GetConnectionString("DefaultConnection")
         ?? "Data Source=smartdesk.db"));
 builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
 
-// ??? Natural?Language Task Parser ??????????????????????????????????????????????
+// Natural Language Task Parser 
 builder.Services.AddScoped<INaturalLanguageTaskParser, TaskParserService>();
 
-// ??? Domain Events & Notifications ????????????????????????????????????????????
+// Domain Events & Notifications 
 builder.Services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
 builder.Services.AddScoped<IEventHandler<TodoItemCompletedEvent>, NotifyOnCompletionHandler>();
 
@@ -52,7 +53,22 @@ builder.Services.AddScoped<IReminderService, SmtpReminderService>();
 builder.Services.Configure<ReminderSettings>(config.GetSection("Reminder"));
 builder.Services.AddHostedService<ReminderSchedulerService>();
 
-// ??? Email Summarizer (OpenAI & Ollama) ????????????????????????????????????????
+// Calendar Planner {Google & Microsoft) 
+builder.Services.Configure<CalendarSettings>(
+    builder.Configuration.GetSection("Calendar"));
+
+builder.Services.AddScoped<GoogleCalendarPlannerService>();
+builder.Services.AddScoped<MicrosoftCalendarPlannerService>();
+
+builder.Services.AddScoped<ICalendarPlannerService>(sp =>
+{
+    var settings = sp.GetRequiredService<IOptions<CalendarSettings>>().Value;
+    return settings.Provider.Equals("Microsoft", StringComparison.OrdinalIgnoreCase)
+        ? sp.GetRequiredService<MicrosoftCalendarPlannerService>()
+        : sp.GetRequiredService<GoogleCalendarPlannerService>();
+});
+
+// Email Summarizer (OpenAI & Ollama) 
 builder.Services.Configure<EmailSummarizerSettings>(
     config.GetSection("EmailSummarizer"));
 
@@ -77,12 +93,12 @@ builder.Services.AddScoped<IEmailSummarizerService>(sp =>
         : sp.GetRequiredService<OpenAIEmailSummarizerService>();
 });
 
-// ??? Health Checks & Metrics ???????????????????????????????????????????????????
+// Health Checks & Metrics 
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<SmartDeskDbContext>("Database")
     .AddCheck<SmtpHealthCheck>("SMTP");
 
-// ??? API Versioning & Swagger ??????????????????????????????????????????????????
+// API Versioning & Swagger 
 builder.Services.AddControllers();
 builder.Services.AddApiVersioning(options =>
 {
@@ -97,11 +113,16 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
+
 
 var app = builder.Build();
 
-// ??? Migrate & Seed Data ??????????????????????????????????????????????????????
+// Migrate & Seed Data 
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SmartDeskDbContext>();
@@ -117,7 +138,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// ??? Middleware Pipeline ?????????????????????????????????????????????????????
+// Middleware Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

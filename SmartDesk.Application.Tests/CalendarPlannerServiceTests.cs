@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using SmartDesk.Application.DTOs;
 using SmartDesk.Application.Interfaces;
 using SmartDesk.Infrastructure.AI;
 using Xunit;
@@ -23,9 +24,14 @@ namespace SmartDesk.Application.Tests
             string calendarId = "primary";
             DateTime from = new DateTime(2025, 8, 1, 9, 0, 0, DateTimeKind.Utc);
             DateTime to = new DateTime(2025, 8, 1, 17, 0, 0, DateTimeKind.Utc);
-
+            var freeBusyRequest = new CalendarFreeBusyRequest
+            {
+                CalendarId = calendarId,
+                From = from,
+                To = to
+            };
             // Act
-            var result = await _service.GetFreeBusyAsync(calendarId, from, to);
+            var result = await _service.GetFreeBusyAsync(freeBusyRequest);
 
             // Assert
             result.CalendarId.Should().Be(calendarId);

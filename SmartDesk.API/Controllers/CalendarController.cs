@@ -21,7 +21,8 @@ namespace SmartDesk.API.Controllers
         [HttpPost("freebusy")]
         public async Task<ActionResult<FreeBusyDto>> GetFreeBusy([FromBody] CalendarFreeBusyRequest request)
         {
-            var result = await _planner.GetFreeBusyAsync(request.CalendarId, request.From, request.To);
+            
+            var result = await _planner.GetFreeBusyAsync(request);
             return Ok(result);
         }
     }

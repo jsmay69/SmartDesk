@@ -6,6 +6,7 @@ namespace SmartDesk.Application.Interfaces
 {
     public interface ICalendarPlannerService
     {
-        Task<FreeBusyDto> GetFreeBusyAsync(string calendarId, DateTime from, DateTime to);
+        //Task<FreeBusyDto> GetFreeBusyAsync(string calendarId, DateTime from, DateTime to);
+        Task<FreeBusyDto> GetFreeBusyAsync(CalendarFreeBusyRequest req);
     }
 }
