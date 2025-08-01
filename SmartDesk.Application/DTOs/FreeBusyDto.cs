@@ -1,19 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using SmartDesk.Application.DTOs;
 
 namespace SmartDesk.Application.DTOs
 {
-    public class TimeSlotDto
-    {      
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
-    }
-
+  
+    /// <summary>
+    /// Response returned from the Calendar Planner agent with busy and free time slots.
+    /// </summary>
     public class FreeBusyDto
     {
-        public string CalendarId { get; set; } = string.Empty;
-        public List<TimeSlotDto> BusySlots { get; set; } = new();
-        public List<TimeSlotDto> FreeSlots { get; set; } = new();
+        /// <summary>
+        /// The calendar ID that was queried.
+        /// </summary>
+        public string CalendarId { get; set; }
+
+        /// <summary>
+        /// List of time slots when the calendar is busy.
+        /// </summary>
+        public List<TimeSlotDto> BusySlots { get; set; }
+
+        /// <summary>
+        /// List of time slots when the calendar is free.
+        /// </summary>
+        public List<TimeSlotDto> FreeSlots { get; set; }
     }
 }

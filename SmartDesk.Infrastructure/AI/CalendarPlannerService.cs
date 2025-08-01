@@ -1,7 +1,5 @@
 ﻿using SmartDesk.Application.DTOs;
 using SmartDesk.Application.Interfaces;
-using System;
-using System.Threading.Tasks;
 
 namespace SmartDesk.Infrastructure.AI
 {
@@ -20,7 +18,7 @@ namespace SmartDesk.Infrastructure.AI
                 CalendarId = req.CalendarId,
                 BusySlots = new()
                 {
-                    new TimeSlotDto { Start = busyStart, End = busyEnd }
+                    new TimeSlotDto { Start = busyStart, End = busyEnd } 
                 },
                 FreeSlots = new()
                 {

@@ -16,8 +16,15 @@ namespace SmartDesk.API.Controllers
             => _planner = planner;
 
         /// <summary>
-        /// Returns free/busy slots for a given calendar between `From` and `To`.
+        /// Retrieves busy and free time slots from the user's Google Calendar within a specified time window.
         /// </summary>
+        /// <param name="request">The calendar ID and time range to query</param>
+        /// <returns>A list of busy and free time slots</returns>
+        /// <response code="200">Returns a list of busy and free periods</response>
+        /// <response code="400">If the request is invalid</response>
+        [HttpPost("calendar/freebusy")]
+        [ProducesResponseType(typeof(FreeBusyDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("freebusy")]
         public async Task<ActionResult<FreeBusyDto>> GetFreeBusy([FromBody] CalendarFreeBusyRequest request)
         {

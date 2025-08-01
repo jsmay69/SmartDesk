@@ -34,7 +34,8 @@ namespace SmartDesk.Infrastructure.Common
                 // if there is a gap before this busy period, record it
                 if (busyStart > cursor && cursor < windowEnd)
                 {
-                    free.Add(new TimeSlotDto {
+                    free.Add(new TimeSlotDto
+                    {
                        Start = cursor,
                        End = busyStart < windowEnd ? busyStart : windowEnd
                     });
