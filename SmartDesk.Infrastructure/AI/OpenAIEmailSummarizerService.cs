@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Prometheus;
-using SmartDesk.Application.Configuration;
+using SmartDesk.Application.Configurations;
 using SmartDesk.Application.DTOs;
 using SmartDesk.Application.Interfaces;
 using System;
@@ -34,11 +34,11 @@ namespace SmartDesk.Infrastructure.AI
                    "Total number of email summarizations performed");
         public OpenAIEmailSummarizerService(
             HttpClient http,
-            IOptions<EmailSummarizerSettings> opts)
+            IOptions<LlmSettings> opts)
         {
             _http = http;
-            _apiKey = opts.Value.OpenAIApiKey;
-            _model = opts.Value.OpenAIModel;
+            _apiKey = opts.Value.OpenAI.ApiKey;
+            _model = opts.Value.OpenAI.Model;
         }
 
         public async Task<EmailSummaryDto> SummarizeAsync(string rawEmailText)

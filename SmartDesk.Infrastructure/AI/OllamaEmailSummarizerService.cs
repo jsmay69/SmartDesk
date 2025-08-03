@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using SmartDesk.Application.Configuration;
+using SmartDesk.Application.Configurations;
 using SmartDesk.Application.DTOs;
 using SmartDesk.Application.Interfaces;
 using System;
@@ -21,11 +21,11 @@ namespace SmartDesk.Infrastructure.AI
 
         public OllamaEmailSummarizerService(
             HttpClient http,
-            IOptions<EmailSummarizerSettings> opts
+            IOptions<LlmSettings> opts
         )
         {
             _http = http;
-            _model = opts.Value.OllamaModel;
+            _model = opts.Value.Ollama.Model;
         }
 
         public async Task<EmailSummaryDto> SummarizeAsync(string rawEmailText)

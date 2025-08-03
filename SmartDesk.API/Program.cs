@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Prometheus;
 using SmartDesk.API;
-using SmartDesk.Application.Configuration;
+
 using SmartDesk.Application.Configurations;
 using SmartDesk.Application.Interfaces;
 using SmartDesk.Domain.Common;
@@ -53,6 +53,23 @@ builder.Services.AddScoped<IReminderService, SmtpReminderService>();
 builder.Services.Configure<ReminderSettings>(config.GetSection("Reminder"));
 builder.Services.AddHostedService<ReminderSchedulerService>();
 
+
+
+builder.Services.Configure<LlmSettings>(builder.Configuration.GetSection("LLM"));
+
+// Natural Language Query Service
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<OpenAiClient>();
+builder.Services.AddScoped<OllamaClient>();
+
+builder.Services.AddScoped<ILLMClient>(sp =>
+{
+    var settings = sp.GetRequiredService<IOptions<LlmSettings>>().Value;
+    return settings.Provider.Equals("Ollama", StringComparison.OrdinalIgnoreCase)
+        ? sp.GetRequiredService<OllamaClient>()
+        : sp.GetRequiredService<OpenAiClient>();
+});
+
 // Calendar Planner {Google & Microsoft) 
 builder.Services.Configure<CalendarSettings>(
     builder.Configuration.GetSection("Calendar"));
@@ -68,26 +85,24 @@ builder.Services.AddScoped<ICalendarPlannerService>(sp =>
         : sp.GetRequiredService<GoogleCalendarPlannerService>();
 });
 
-// Email Summarizer (OpenAI & Ollama) 
-builder.Services.Configure<EmailSummarizerSettings>(
-    config.GetSection("EmailSummarizer"));
 
-builder.Services.AddHttpClient<OpenAIEmailSummarizerService>(client =>
+builder.Services.AddHttpClient<OpenAIEmailSummarizerService>((sp, client) =>
 {
-    client.BaseAddress = new Uri("https://api.openai.com");
+    var settings = sp.GetRequiredService<IOptions<LlmSettings>>().Value;
+    client.BaseAddress = new Uri(settings.OpenAI.Endpoint);
 });
 
 builder.Services.AddHttpClient<OllamaEmailSummarizerService>((sp, client) =>
 {
-    var settings = sp.GetRequiredService<IOptions<EmailSummarizerSettings>>().Value;
-    client.BaseAddress = new Uri(settings.OllamaEndpoint);
+    var settings = sp.GetRequiredService<IOptions<LlmSettings>>().Value;
+    client.BaseAddress = new Uri(settings.Ollama.Endpoint);
 });
 
 builder.Services.AddScoped<OpenAIEmailSummarizerService>();
 builder.Services.AddScoped<OllamaEmailSummarizerService>();
 builder.Services.AddScoped<IEmailSummarizerService>(sp =>
 {
-    var settings = sp.GetRequiredService<IOptions<EmailSummarizerSettings>>().Value;
+    var settings = sp.GetRequiredService<IOptions<LlmSettings>>().Value;
     return settings.Provider.Equals("Ollama", StringComparison.OrdinalIgnoreCase)
         ? sp.GetRequiredService<OllamaEmailSummarizerService>()
         : sp.GetRequiredService<OpenAIEmailSummarizerService>();
