@@ -19,31 +19,25 @@ public class OllamaClient : ILLMClient
     public async Task<QueryIntentResult> GetIntentAsync(string prompt)
     {
         {
+            var systemPrompt = "Classify the following user input into a structured JSON object.\n" +
+           "Valid values for \"intent\" include:\n" +
+           "- GetTasksDueToday\n" +
+           "- GetTasksDueTomorrow\n" +
+           "- GetTasksByPriority\n" +
+           "- GetOverdueTasks\n" +
+           "- GetFreeTime\n" +
+           "- Unknown\n\n" +
+           "Respond ONLY in this exact format:\n" +
+           "{\n  \"intent\": \"<intent_code>\",\n  \"priority\": \"<optional>\",\n  \"timeframe\": \"<optional>\"\n}\n\n" +
+           $"User input: {prompt}";
+
             var body = new
             {
                 model = _settings.Model,
-                Stream = false,
-                prompt = prompt = $$$"""
-Classify the following user request into one of the following intent categories:
-- GetTasksDueToday
-- GetTasksDueTomorrow
-- GetOverdueTasks
-- GetTasksByPriority
-- GetFreeTime
-- Unknown
-
-Respond in this format:
-{{
-  "intent": "<intent_code>",
-  "priority": "<optional>",
-  "timeframe": "<optional>"
-}}
-
-User input: {prompt}
-
-Respond ONLY with one of the intent codes above.
-"""
+                prompt = systemPrompt,
+                stream = false
             };
+
 
             var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("/api/generate", content);

@@ -19,6 +19,7 @@ using SmartDesk.Application.Interfaces;
 using SmartDesk.Domain.Common;
 using SmartDesk.Domain.Entities;
 using SmartDesk.Domain.Events;
+using SmartDesk.Infrastructure.Agent;
 using SmartDesk.Infrastructure.AI;
 using SmartDesk.Infrastructure.Common;
 using SmartDesk.Infrastructure.Events;
@@ -69,6 +70,12 @@ builder.Services.AddScoped<ILLMClient>(sp =>
         ? sp.GetRequiredService<OllamaClient>()
         : sp.GetRequiredService<OpenAiClient>();
 });
+
+// Orchestrator Agent
+builder.Services.AddScoped<IAgentOrchestrator, AgentOrchestrator>();
+
+// Natural Language Query Agent
+builder.Services.AddScoped<IQueryAgentService, QueryAgentService>();
 
 // Calendar Planner {Google & Microsoft) 
 builder.Services.Configure<CalendarSettings>(
