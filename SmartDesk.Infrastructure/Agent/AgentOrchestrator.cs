@@ -13,44 +13,64 @@ namespace SmartDesk.Infrastructure.Agent
     {
         private readonly IQueryAgentService _queryAgent;
         private readonly ICalendarPlannerService _calendarService;
+        private readonly IOrchestrationIntentClient _intentClient;
 
         public AgentOrchestrator(
-            IQueryAgentService queryAgent,
-            ICalendarPlannerService calendarService)
+    IQueryAgentService queryAgent,
+    ICalendarPlannerService calendarService,
+    IOrchestrationIntentClient intentClient)
         {
             _queryAgent = queryAgent;
             _calendarService = calendarService;
+            _intentClient = intentClient;
         }
 
         public async Task<OrchestratedResponseDto> HandleAsync(string prompt)
         {
-            if (prompt.ToLower().Contains("plan my day"))
+            var intentResult = await _intentClient.GetOrchestrationIntentAsync(prompt);
+
+            if (intentResult.Intent == "PlanMyDay")
             {
-                var taskQuery = new QueryRequestDto { Prompt = "What are my tasks due today?" };
-                var taskResult = await _queryAgent.ProcessQueryAsync(taskQuery);
-
-                var calendarRequest = new CalendarFreeBusyRequest
-                {
-                    CalendarId = "primary",
-                    From = DateTime.UtcNow.Date.AddHours(9),
-                    To = DateTime.UtcNow.Date.AddHours(17)
-                };
-
-                FreeBusyDto calendarResult = await _calendarService.GetFreeBusyAsync(calendarRequest);
-              
-                return new OrchestratedResponseDto
+                var response = new OrchestratedResponseDto
                 {
                     Summary = "Here’s your plan for the day:",
-                    Items = taskResult.Items
-                        .Concat(calendarResult.FreeSlots.Select(slot => new ScheduleItemDto
-                        {
-                            Title = "Free Time",
-                            Start = slot.Start,
-                            End = slot.End,
-                            IsTask = false
-                        })).ToList(),
-                    Sources = new[] { "Tasks", "Calendar" }
+                    Items = new List<ScheduleItemDto>(),
+                    Sources = new List<string>()
                 };
+
+                if (intentResult.Agents.Contains("Tasks"))
+                {
+                    var tasks = await _queryAgent.ProcessQueryAsync(new QueryRequestDto
+                    {
+                        Prompt = "What are my high priority tasks due today?"
+                    });
+                    response.Items.AddRange(tasks.Items);
+                    response.Sources.Add("Tasks");
+                }
+
+                if (intentResult.Agents.Contains("Calendar"))
+                {
+                    var calendarRequest = new CalendarFreeBusyRequest
+                    {
+                        CalendarId = "primary",
+                        From = DateTime.UtcNow.Date.AddHours(9),
+                        To = DateTime.UtcNow.Date.AddHours(17)
+                    };
+
+                    var freeBusySlots = await _calendarService.GetFreeBusyAsync(calendarRequest);
+                    
+                    response.Items.AddRange(freeBusySlots.FreeSlots.Select(f => new ScheduleItemDto
+                    {
+                        Title = "Free Time",
+                        Start = f.Start,
+                        End = f.End,
+                        IsTask = false
+                    }));
+
+                    response.Sources.Add("Calendar");
+                }
+
+                return response;
             }
 
             return new OrchestratedResponseDto

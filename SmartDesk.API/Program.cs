@@ -71,9 +71,21 @@ builder.Services.AddScoped<ILLMClient>(sp =>
         : sp.GetRequiredService<OpenAiClient>();
 });
 
+builder.Services.AddScoped<OpenAiOrchestrationClient>();
+builder.Services.AddScoped<OllamaOrchestrationClient>();
+
+builder.Services.AddScoped<IOrchestrationIntentClient>(sp =>
+{
+    var settings = sp.GetRequiredService<IOptions<LlmSettings>>().Value;
+    return settings.Provider.Equals("Ollama", StringComparison.OrdinalIgnoreCase)
+      ? sp.GetRequiredService<OllamaOrchestrationClient>()
+      : sp.GetRequiredService<OpenAiOrchestrationClient>();
+});
+
 // Orchestrator Agent
 builder.Services.AddScoped<IAgentOrchestrator, AgentOrchestrator>();
 
+builder.Services.AddScoped<IOrchestrationIntentClient, OllamaOrchestrationClient>();
 // Natural Language Query Agent
 builder.Services.AddScoped<IQueryAgentService, QueryAgentService>();
 

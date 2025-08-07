@@ -10,7 +10,7 @@ namespace SmartDesk.Application.DTOs
     {
         public string Summary { get; set; } = string.Empty;
         public List<ScheduleItemDto> Items { get; set; } = new();
-        public string[] Sources { get; set; } = Array.Empty<string>();
+        public List<string> Sources { get; set; } = new List<string>();
     }
 
 }
